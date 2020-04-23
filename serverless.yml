@@ -6,9 +6,43 @@ package:
 plugins:
   - serverless-bundle
   - serverless-offline
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
   runtime: nodejs10.x
   stage: prod
   region: ap-northeast-2
+
+  environment:
+    tableName: notes
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb: DescribeTable
+        - dynamodb: Query
+        - dynamodb: Scan
+        - dynamodb: GetItem
+        - dynamodb: PutItem
+        - dynamodb: UpdateItem
+        - dynamodb: DeleteItem
+      Resource: "arn:aws:dynamodb:ap-northeast-2:*:*"
+
+functions:
+  create:
+    handler: create.main
+    events:
+      - http:
+          path: notes
+          method: post
+          cors: true
+          authorizer: aws_iam
+  get:
+    handler: get.main
+    events:
+      - http:
+          path: notes / {id}
+          method: get
+          cors: true
+          authorizer: aws_iam
