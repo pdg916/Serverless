@@ -3,9 +3,6 @@ service: notes
 package:
   individually: true
 
-resources:
-  - ${file(resources/api-gateway-errors.yml)}
-
 plugins:
   - serverless-bundle
   - serverless-offline
@@ -78,7 +75,10 @@ functions:
     handler: billing.main
     events:
       - http:
-          path: billing
-          method: post
-          cors: true
-          authorizer: aws_iam
+        path: billing
+        method: post
+        cors: true
+        authorizer: aws_iam
+
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
