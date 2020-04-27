@@ -3,6 +3,9 @@ service: notes
 package:
   individually: true
 
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
+
 plugins:
   - serverless-bundle
   - serverless-offline
@@ -16,6 +19,7 @@ provider:
 
   environment:
     tableName: notes
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   iamRoleStatements:
     - Effect: Allow
